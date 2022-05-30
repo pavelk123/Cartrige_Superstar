@@ -1,7 +1,4 @@
 
-import email
-from pyexpat import model
-from turtle import title
 from django.db import models
 
 class Factory(models.Model):
@@ -12,10 +9,16 @@ class Factory(models.Model):
 class PrinterProducer(models.Model):
     title = models.CharField(max_length=120)
 
+    def get_example(self):
+        return 'example'
+
+    def __str__(self):
+        return self.title
 
 class PrinterModelSeries(models.Model):
     title = models.CharField(max_length=254)
     
+
     producer=models.ForeignKey(PrinterProducer, on_delete=models.CASCADE)
 
 
@@ -30,4 +33,21 @@ class FactoryPrinter(models.Model):
 class Cartrige(models.Model):
     title= models.CharField(max_length=120)
     quantity = models.IntegerField()
+    min_quantity  = models.IntegerField()
+    alert_quantity = models.BooleanField(default=False)
     model_series= models.ForeignKey(PrinterModelSeries, on_delete=models.CASCADE)
+    
+    
+    def save(self, *args, **kwargs):
+        if self.quantity < 0:
+            self.quantity = 0
+        if self.quantity < self.min_quantity:
+            self.alert_quantity = True
+        if self.quantity >= self.min_quantity:
+            self.alert_quantity=False
+        super(Cartrige, self).save(*args, **kwargs)
+
+class RepairCompany(models.Model):
+    title = models.CharField(max_length=120)
+    email = models.EmailField()
+    producer = models.ForeignKey(PrinterProducer, on_delete=models.CASCADE)
