@@ -1,6 +1,11 @@
 
 from django.db import models
 
+class RepairCompany(models.Model):
+    title = models.CharField(max_length=120)
+    email = models.EmailField()
+    
+
 class Factory(models.Model):
     title = models.CharField(max_length=120)
     email = models.EmailField() 
@@ -8,6 +13,7 @@ class Factory(models.Model):
 
 class PrinterProducer(models.Model):
     title = models.CharField(max_length=120)
+    repair_company=models.ForeignKey(RepairCompany,on_delete=models.CASCADE)
 
     def get_example(self):
         return 'example'
@@ -43,11 +49,7 @@ class Cartrige(models.Model):
             self.quantity = 0
         if self.quantity < self.min_quantity:
             self.alert_quantity = True
-        if self.quantity >= self.min_quantity:
+        elif self.quantity >= self.min_quantity:
             self.alert_quantity=False
         super(Cartrige, self).save(*args, **kwargs)
 
-class RepairCompany(models.Model):
-    title = models.CharField(max_length=120)
-    email = models.EmailField()
-    producer = models.ForeignKey(PrinterProducer, on_delete=models.CASCADE)
