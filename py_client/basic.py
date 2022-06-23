@@ -1,10 +1,14 @@
 import requests
 
+endpoint= 'http://localhost:8000/api/v1/catalog/cartrige/4'
+#endpoint= 'http://localhost:8000/api/v1/catalog/cartrige/4/factory_printers'
+endpoint= 'http://localhost:8000/api/v1/catalog/cartrige/'
 
-endpoint= 'http://localhost:8000/api'
-#endpoint= 'http://localhost:8000/api/create_printer_producer'
+
+#get_response = requests.get(endpoint,params={'abc':123},json={"query":'Bye petuh'})
+get_response = requests.get(endpoint)
+
+# get_response = requests.post(endpoint, json={'title':'Petro','email':'221sqqw@sdsd.df'})
 
 
-get_response = requests.get(endpoint,params={'abc':123},json={"query":'Bye petuh'})
-#get_response = requests.get(endpoint,params={'title':'Canon'})
 print(get_response.json())
